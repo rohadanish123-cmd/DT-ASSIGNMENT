@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Kaneko | K-Drama Matchmaker</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:'Nanum Gothic',sans-serif;
+text-align:center;
+color:white;
+background:#111;
+background-size:cover;
+background-position:center;
+}
+
+.container{
+background:rgba(0,0,0,0.75);
+padding:30px;
+width:70%;
+margin:auto;
+margin-top:60px;
+border-radius:15px;
+}
+
+h1{color:#ffccff;}
+h2{color:#a6e3ff;}
+
+button{
+padding:12px 25px;
+margin:10px;
+font-size:16px;
+background:#ff99cc;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:#ff66aa;
+}
+
+.poster{
+width:160px;
+height:230px;
+object-fit:cover;
+border-radius:10px;
+margin:10px;
+}
+
+.dramaCard{
+display:inline-block;
+margin:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Kaneko | K-Drama Matchmaker</h1>
+<p>안녕하세요! Find your perfect K-Drama</p>
+
+<div id="question"></div>
+
+</div>
+
+<script>
+
+let genre=""
+let subgenre=""
+let episodes=""
+
+let question=document.getElementById("question")
+
+const subgenres={
+romance:["dark romance","tragic love","rom-com","enemies to lovers","workplace"],
+thriller:["action","horror","revenge","mystery/law"],
+fantasy:["supernatural","historical"],
+feelgood:["comedy","slice of life","light hearted","family"]
+}
+
+const recs={
+
+romance:{
+
+"dark romance":{
+
+short:[
+{title:"Nevertheless",poster:""},
+{title:"Somebody",poster:""}
+],
+
+medium:[
+{title:"When the Phone Rings",poster:"https://image2url.com/r2/default/images/1772949578499-963f3060-daf5-4175-81b6-31e9c222ba0e.webp"},
+{title:"The Judge from Hell",poster:"https://image2url.com/r2/default/images/1772949583346-e9c2328a-c4d1-42c7-bb4d-1cc978a29894.webp"}
+],
+
+long:[
+{title:"Moon Lovers: Scarlet Heart Ryeo",poster:""},
+{title:"The Smile Has Left Your Eyes",poster:""}
+]
+
+},
+
+"rom-com":{
+
+short:[
+{title:"Please Don't Date Him",poster:""},
+{title:"One Sunny Day",poster:"="}
+],
+
+medium:[
+{title:"Business Proposal",poster:"https://image2url.com/r2/default/images/1772947908740-41781841-6aa8-4c49-9b44-d884d0f8ed77.webp"},
+{title:"No Gain No Love",poster:"https://image2url.com/r2/default/images/1772947878454-25b71879-99ae-41b2-a5ec-9295391f17ed.webp"}
+],
+
+long:[
+{title:"What's Wrong with Secretary Kim",poster:""},
+{title:"My ID is Gangnam Beauty",poster:""}
+]
+
+},
+
+"tragic love":{
+
+short:[
+{title:"Our Movie",poster:""}
+],
+
+medium:[
+{title:"Youth of May",poster:""},
+{title:"Dear Hongrang",poster:""}
+],
+
+long:[
+{title:"Snowdrop",poster:""},
+{title:"Call It Love",poster:""}
+]
+
+},
+
+"enemies to lovers":{
+
+short:[
+{title:"Love to Hate You",poster:"https://image2url.com/r2/default/images/1772869401603-5ffc3aa8-e0c2-4381-b8a0-17e795e192b0.jpg"},
+{title:"Mad for Each Other",poster:"https://image2url.com/r2/default/images/1772869500141-684761b5-cfab-40ad-8b9c-5fcd6a3196d6.jpg"}
+],
+
+medium:[
+{title:"Tastefully Yours",poster:"https://image2url.com/r2/default/images/1772869538083-27941e81-0507-4e9e-a981-f1e701af85f5.jpg"},
+{title:"My Dearest Nemesis",poster:"https://image2url.com/r2/default/images/1772869612151-2b10fbd3-3b46-4142-8995-e1c2d6453937.jpg"}
+],
+
+long:[
+{title:"Love Next Door",poster:"https://image2url.com/r2/default/images/1772869576237-1e6471ce-d161-4f52-9dc3-030d6b20b191.jpg"},
+{title:"Sh**ting Stars",poster:"https://image2url.com/r2/default/images/1772869690701-642718e7-e9bf-435e-ae36-2e2dc5473420.jpg"}
+]
+
+},
+
+workplace:{
+
+short:[
+{title:"Love to Hate You",poster:"https://image2url.com/r2/default/images/1772869401603-5ffc3aa8-e0c2-4381-b8a0-17e795e192b0.jpg"},
+{title:"The Trauma Code: Heroes on Call",poster:"https://image2url.com/r2/default/images/1772869654845-6c0af207-ac87-4026-b9c5-2fcf85e1d646.jpg"}
+],
+
+medium:[
+{title:"Business Proposal",poster:"https://image2url.com/r2/default/images/1772947908740-41781841-6aa8-4c49-9b44-d884d0f8ed77.webp"},
+{title:"Marry My Husband",poster:"https://image2url.com/r2/default/images/1772869798310-16550af1-0ae3-4e78-a551-8ae01a04264a.jpg"}
+],
+
+long:[
+{title:"Typhoon Family",poster:"https://image2url.com/r2/default/images/1772869770316-a207a375-cc3f-4e94-8b85-86534f5e58ef.jpg"},
+{title:"King the Land",poster:"https://image2url.com/r2/default/images/1772869834856-aee0e139-a7c7-4dd7-be86-845061fe86c2.jpg"}
+]
+}
+
+},
+
+feelgood:{
+
+comedy:{
+
+short:[
+{title:"Scripting Your Destiny",poster:"https://image2url.com/r2/default/images/1772869882297-0dfefe61-1f6b-4e57-a06a-818a44ecc007.jpg"},
+{title:"The Killer's Shopping List",poster:""}
+],
+
+medium:[
+{title:"See You in My 19th Life",poster:""},
+{title:"Lovestruck in the City",poster:""}
+],
+
+long:[
+{title:"Weightlifting Fairy Kim Bok-joo",poster:"https://image2url.com/r2/default/images/1772948071548-b353d210-729f-40de-8a48-c9f746e369e4.webp"},
+{title:"Sh**ting Stars",poster:"https://image2url.com/r2/default/images/1772869690701-642718e7-e9bf-435e-ae36-2e2dc5473420.jpg"},
+{title:"Strong Girl Bong-soon",poster:"https://image2url.com/r2/default/images/1772948070837-89f8ece7-4ea8-4eb8-9044-a0557515f2df.webp"}
+]
+
+},
+
+"light hearted":{
+
+short:[
+{title:"Scripting Your Destiny",poster:"https://image2url.com/r2/default/images/1772869882297-0dfefe61-1f6b-4e57-a06a-818a44ecc007.jpg"},
+{title:"To My Star",poster:""}
+],
+
+medium:[
+{title:"Business Proposal",poster:"https://image2url.com/r2/default/images/1772947908740-41781841-6aa8-4c49-9b44-d884d0f8ed77.webp"},
+{title:"Once Upon a Small Town",poster:""}
+],
+
+long:[
+{title:"Strong Girl Bong-soon",poster:"https://image2url.com/r2/default/images/1772948070837-89f8ece7-4ea8-4eb8-9044-a0557515f2df.webp"},
+{title:"Hometown Cha Cha Cha",poster:"https://image2url.com/r2/default/images/1772949969566-28f7217c-1e90-4384-a08f-c4c25f101b83.webp"}
+]
+
+},
+
+"slice of life":{
+
+short:[
+{title:"Move to Heaven",poster:""},
+{title:"One Day Off",poster:""}
+],
+
+medium:[
+{title:"Daily Dose of Sunshine",poster:""},
+{title:"Summer Strike",poster:""}
+],
+
+long:[
+{title:"Twenty-Five Twenty-One",poster:""},
+{title:"True Beauty",poster:""}
+]
+
+},
+
+family:{
+
+short:[
+{title:"Serendipity's Embrace",poster:""},
+{title:"The Sound of Your Heart",poster:""}
+],
+
+medium:[
+{title:"The Good Bad Mother",poster:""},
+{title:"Navillera",poster:""}
+],
+
+long:[
+{title:"Family by Choice",poster:"https://image2url.com/r2/default/images/1772950106194-1ee0a023-7b91-441d-a042-d9cf4cc27a6f.webp"},
+{title:"Reply 1988",poster:"https://image2url.com/r2/default/images/1772950097973-967d56a3-bc5f-402d-834e-b35ad641ca5e.webp"}
+]
+
+}
+
+},
+
+thriller:{
+
+action:{
+
+short:[
+{title:"Study Group",poster:"https://image2url.com/r2/default/images/1772949009791-38cd10a4-cbf3-4460-b8ef-6081132e1141.webp"},
+{title:"The Silent Sea",poster:"https://image2url.com/r2/default/images/1772949002919-c8eb76bc-ccfc-44f6-b791-84f7394f7c56.webp"}
+],
+
+medium:[
+{title:"Bad and Crazy",poster:""},
+{title:"A Shop for Killers",poster:""}
+],
+
+long:[
+{title:"Vincenzo",poster:""},
+{title:"Tale of the Nine Tailed",poster:""}
+]
+
+},
+
+horror:{
+
+short:[
+{title:"Sweet Home",poster:""},
+{title:"Duty After School",poster:""}
+],
+
+medium:[
+{title:"The Cursed",poster:"https://image2url.com/r2/default/images/1772948237703-e9557d17-234b-46b8-b8ae-71ff15b865c8.webp"},
+{title:"All of Us Are Dead",poster:"https://image2url.com/r2/default/images/1772948240492-dbfc2e8d-260b-49c1-a4a0-33fd1003c5d1.webp"}
+],
+
+long:[
+{title:"Flower of Evil",poster:""},
+{title:"Beyond Evil",poster:""}
+]
+
+},
+
+revenge:{
+
+short:[
+{title:"Bloodhounds",poster:""},
+{title:"No Mercy",poster:""}
+],
+
+medium:[
+{title:"Revenge of Others",poster:""},
+{title:"Weak Hero Class 1 & 2",poster:""}
+],
+
+long:[
+{title:"The Glory",poster:""},
+{title:"The Innocent Man",poster:""}
+]
+
+},
+
+"mystery/law":{
+
+short:[
+{title:"Juvenile Justice",poster:""},
+{title:"One Ordinary Day",poster:""}
+],
+
+medium:[
+{title:"Beyond the Bar",poster:"https://image2url.com/r2/default/images/1772948930002-44e17c41-2c3d-49b2-9544-d2304ee07b71.webp"},
+{title:"Idol Identity",poster:"https://image2url.com/r2/default/images/1772948603808-b649a442-6d96-43ae-8a74-416c7a3094f1.webp"}
+],
+
+long:[
+{title:"Friendly Rivalry",poster:""},
+{title:"Extraordinary Attorney Woo",poster:""}
+]
+
+}
+
+},
+
+fantasy:{
+
+supernatural:{
+
+short:[
+{title:"One More Time",poster:""},
+{title:"Twelve",poster:""}
+],
+
+medium:[
+{title:"Mystic Pop-Up Bar",poster:""},
+{title:"Celebrity",poster:""}
+],
+
+long:[
+{title:"Goblin",poster:"https://image2url.com/r2/default/images/1772949354419-9b57f2ae-101e-4510-b0ac-30159947672e.webp"},
+{title:"My Demon",poster:"https://image2url.com/r2/default/images/1772949393608-4139f052-b6c5-423a-8896-c0bfa11c76a8.webp"}
+]
+
+},
+
+historical:{
+
+short:[
+{title:"Kingdom",poster:""},
+{title:"One Ordinary Day",poster:""}
+],
+
+medium:[
+{title:"Moon River",poster:""},
+{title:"Bon Appetit Your Majesty",poster:""}
+],
+
+long:[
+{title:"Mr Queen",poster:"https://image2url.com/r2/default/images/1772948363342-860a4625-0dbb-4faa-96af-15a353ec6931.webp"},
+{title:"The King's Affection",poster:"https://image2url.com/r2/default/images/1772948361413-557ce9c2-25e7-4acd-ac3d-b1bb1d1ddee2.webp"},
+{title:"Alchemy of Souls",poster:"https://image2url.com/r2/default/images/1772869156935-20ab35d7-f98a-467e-89c9-f67a7e0b646e.jpg"}
+]
+
+}
+
+}
+
+}
+
+function startQuiz(){
+
+question.innerHTML=`
+
+<h2>Choose a Genre</h2>
+
+<button onclick="chooseGenre('romance')">Romance</button>
+<button onclick="chooseGenre('thriller')">Thriller</button>
+<button onclick="chooseGenre('fantasy')">Fantasy</button>
+<button onclick="chooseGenre('feelgood')">Feel Good</button>
+
+`
+
+}
+
+function chooseGenre(g){
+
+genre=g
+
+let buttons=""
+
+subgenres[g].forEach(s=>{
+buttons+=`<button onclick="chooseSubgenre('${s}')">${s}</button>`
+})
+
+question.innerHTML=`<h2>Choose a Subgenre</h2>${buttons}`
+
+}
+
+function chooseSubgenre(s){
+
+subgenre=s
+
+question.innerHTML=`
+
+<h2>How many episodes?</h2>
+
+<button onclick="chooseEpisodes('short')">8-10</button>
+<button onclick="chooseEpisodes('medium')">12-14</button>
+<button onclick="chooseEpisodes('long')">16+</button>
+
+`
+
+}
+
+function chooseEpisodes(e){
+
+episodes=e
+showResult()
+
+}
+
+function showResult(){
+
+let dramas=recs[genre][subgenre][episodes]
+
+let html="<h2>Your K-Drama Recommendation</h2>"
+
+dramas.forEach(d=>{
+
+html+=`
+
+<div class="dramaCard">
+
+<img class="poster" src="${d.poster}">
+<p>${d.title}</p>
+
+</div>
+
+`
+
+})
+
+html+=`<br><button onclick="startQuiz()">Restart Quiz</button>`
+
+question.innerHTML=html
+
+}
+
+startQuiz()
+
+</script>
+
+</body>
+</html>
